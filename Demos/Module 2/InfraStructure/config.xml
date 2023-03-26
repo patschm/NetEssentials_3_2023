@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+	<MyConfiguration>
+		<Name>Patrick</Name>
+		<Hobbies>Has</Hobbies>
+		<Hobbies>No</Hobbies>
+		<Hobbies>Life</Hobbies>
+		<Address>
+			<StreetName>Milkyway</StreetName>
+			<Number>101</Number>
+		</Address>
+		<Age>42</Age>
+	</MyConfiguration>
+</configuration>
