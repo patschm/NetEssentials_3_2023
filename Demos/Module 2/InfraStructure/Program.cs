@@ -19,12 +19,12 @@ internal class Program
 {
     static void Main(string[] args)
     {
-        EnvironmentSettings();
+        //EnvironmentSettings();
         //Configuration();
         //Secrets();
         //Logging();
         //DependencyInjection();
-        //AllInOne();
+        AllInOne();
     }
 
     private static void EnvironmentSettings()
@@ -56,16 +56,17 @@ internal class Program
         // AddJsonFile from package Microsoft.Extensions.Configuration.Json;
         bld.SetBasePath(Environment.CurrentDirectory);
         bld.AddJsonFile("appsettings.json", optional:true, reloadOnChange:false);
-        // bld.AddXmlFile("config.xml");
-        // bld.AddIniFile("startup.ini");
+        //bld.AddXmlFile("config.xml");
+        //bld.AddIniFile("startup.ini");
         IConfiguration config = bld.Build();
 
         // Read single entry
         var nameSection = config.GetSection("MyConfiguration:Name");
         Console.WriteLine(nameSection.Value);
+        
         // Read collection. Use extensions from package Microsoft.Extensions.Configuration.Binder
         var hobbiesSection = config.GetSection("MyConfiguration:Hobbies");
-        var data1 = hobbiesSection.Get<string[]>();
+        string[]? data1 = hobbiesSection.Get<string[]>();
         Console.WriteLine(string.Join(',', data1!));
         // Read complex object
         var addressSection = config.GetSection("MyConfiguration:Address");
@@ -104,18 +105,20 @@ internal class Program
 
         var factory = LoggerFactory.Create(bld => {
             // In code:
-            bld.AddFilter((cat, lvl) => {
-                return cat == typeof(LogVictim).FullName && lvl <= LogLevel.Information;
-            });
+            //bld.AddFilter((cat, lvl) => {
+            //    return cat == typeof(LogVictim).FullName && lvl >= LogLevel.Information;
+            //});
             // In config:
-            //bld.AddConfiguration(config.GetSection("Logging"));
+            bld.AddConfiguration(config.GetSection("Logging"));
 
             bld.ClearProviders();
             // From package: Microsoft.Extensions.Logging.Console
             bld.AddConsole();
+            //bld.AddEventLog();
         });
 
         ILogger<LogVictim> logger = factory.CreateLogger<LogVictim>();
+        logger.LogWarning("Hello From Program");
         var obj = new LogVictim(logger);
         obj.DoSomeStuff();
     }
@@ -124,12 +127,20 @@ internal class Program
         var factory = new DefaultServiceProviderFactory();
         var services = new ServiceCollection();
         var builder = factory.CreateBuilder(services);
+        
+        
         builder.AddHostedService<ConsoleHost>();
-        builder.AddTransient<ICounter, Counter>();
-        //builder.AddScoped<ICounter, Counter>();
+        //builder.AddTransient<ICounter, Counter>();
+        builder.AddScoped<ICounter, Counter>();
         //builder.AddSingleton<ICounter, Counter>();
 
         var provider = builder.BuildServiceProvider();
+        //var mem = provider.GetRequiredService<Stream>();
+        //Console.WriteLine(mem is MemoryStream);
+
+        Console.WriteLine("Console Host");
+        var svc = provider.GetRequiredService<IHostedService>();
+        svc.StartAsync(CancellationToken.None).Wait();
 
         Console.WriteLine("==== Run 1 ====");
         using (var scope = provider.CreateScope())
@@ -160,6 +171,8 @@ internal class Program
         // WebHost (net 5.0 or lower) is the one needed for aspnet webapi/mvc
         // WebApplication (net 6 or higher) is the one needed for aspnet webapi/mvc
 
+       
+
         var host = Host.CreateDefaultBuilder()
             .ConfigureAppConfiguration(conf =>
             {
@@ -176,6 +189,8 @@ internal class Program
                 //log.AddConsole(); // Not needed. Is default
             })
             .Build();
+
+        
 
         var logvictim = host.Services.GetRequiredService<LogVictim>();
         logvictim.DoSomeStuff();

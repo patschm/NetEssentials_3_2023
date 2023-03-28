@@ -4,7 +4,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Shapes;
-
+using System.Text;
 
 namespace DrawNotSoPerfect;
 
@@ -23,7 +23,9 @@ internal static class Program
         // (writes output to "Output" window in Visual Studio).
         ApplicationConfiguration.Initialize();
         var host = CreateHostBuilder().Build();
-        Application.Run(host.Services.GetRequiredService<DrawMain>());
+        var inst = host.Services.GetRequiredService<DrawMain>();
+        inst.Text = host.Services.GetRequiredService<string>();
+        Application.Run(inst);
     }
     
     private static IHostBuilder CreateHostBuilder()
@@ -38,8 +40,14 @@ internal static class Program
                 bld.AddDebug();
             })
             .ConfigureServices((ctx, services) => {
+                services.AddTransient<string>(MyFactory);
                 services.AddTransient<DrawMain>();
-                services.AddSingleton<IStorage, LocalFileStorage>();
+                services.AddTransient<IStorage, LocalFileStorage>();
             });
+    }
+
+    static string MyFactory(IServiceProvider fn)
+    {
+        return "Hello World";
     }
 }

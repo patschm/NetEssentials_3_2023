@@ -30,7 +30,7 @@ public class LocalFileStorage : IStorage
     {
         _currentFile = path;
         JsonSerializer serializer = new JsonSerializer();
-        serializer.TypeNameHandling = TypeNameHandling.All;
+        serializer.TypeNameHandling = TypeNameHandling.Auto;
         using (var stream = File.OpenWrite(_currentFile))
         using (var writer = new StreamWriter(stream))
             serializer.Serialize(writer, shapes);

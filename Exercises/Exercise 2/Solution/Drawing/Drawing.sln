@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shapes", "Shapes\Shapes.csproj", "{26A22883-47DA-41BC-94A7-A517C5AB4CF6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shapes", "Shapes\Shapes.csproj", "{26A22883-47DA-41BC-94A7-A517C5AB4CF6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrawNotSoPerfect", "DrawNotSoPerfect\DrawNotSoPerfect.csproj", "{A1C0F3DA-9405-4552-9211-90E095B6EA84}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DrawNotSoPerfect", "DrawNotSoPerfect\DrawNotSoPerfect.csproj", "{A1C0F3DA-9405-4552-9211-90E095B6EA84}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormsApp1", "WinFormsApp1\WinFormsApp1.csproj", "{C929185A-0CE7-4239-9684-43D68A70E621}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{A1C0F3DA-9405-4552-9211-90E095B6EA84}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1C0F3DA-9405-4552-9211-90E095B6EA84}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A1C0F3DA-9405-4552-9211-90E095B6EA84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C929185A-0CE7-4239-9684-43D68A70E621}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C929185A-0CE7-4239-9684-43D68A70E621}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C929185A-0CE7-4239-9684-43D68A70E621}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C929185A-0CE7-4239-9684-43D68A70E621}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

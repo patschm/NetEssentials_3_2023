@@ -7,18 +7,38 @@ internal class Program
 
     static void Main(string[] args)
     {
-        m1.Open();
-        //m1.Close();
-        m1.Dispose();
+        try
+        {
+            m1.Open();
+        }
+        finally
+        {
+            m1.Dispose();
+        }
+        
+        ////m1.Close();
+        //m1.Dispose();
         m1 = null;
 
         //GC.Collect();
         //GC.WaitForPendingFinalizers();
 
-        m2.Open();
+        using (m2)
+        {
+            m2.Open();
+        }
         //m2.Close();
-        m2.Dispose();
+        //m2.Dispose();
         m2 = null;
+
+        using (var m3  = new Unmanaged())
+        {
+            m3.Open();
+        }
+
+        using (var m4 = new Unmanaged())
+            m4.Open();
+
 
         GC.Collect();
         Console.ReadLine();
