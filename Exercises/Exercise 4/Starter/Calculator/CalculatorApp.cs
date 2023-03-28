@@ -7,9 +7,9 @@ public partial class CalculatorApp : Form
         InitializeComponent();
     }
 
-    private void button1_Click(object sender, EventArgs e)
+    private async  void button1_Click(object sender, EventArgs e)
     {
-        var threadHandle = SynchronizationContext.Current;
+        //var threadHandle = SynchronizationContext.Current;
         if (int.TryParse(txtA.Text, out int a) && int.TryParse(txtB.Text, out int b))
         {
             // Synchronous
@@ -17,12 +17,22 @@ public partial class CalculatorApp : Form
             //UpdateAnswer(result);
 
             // Using Tasks
-            Task.Run(()=>LongAdd(a, b))
-                .ContinueWith(pt=> {
-                    threadHandle?.Post(UpdateAnswer, pt.Result);
-                });
+            //Task.Run(()=>LongAdd(a, b))
+            //    .ContinueWith(pt=> {
+            //        threadHandle?.Post(UpdateAnswer, pt.Result);
+            //    });
 
+            //int result=await LongAddAsync(a,b);
+            //UpdateAnswer(result);
+
+            DoJob(a, b).Wait(); // Dead Lock
         }
+    }
+
+    private async Task DoJob(int a, int b)
+    {
+        int result = await LongAddAsync(a, b);
+        UpdateAnswer(result);
     }
 
     private void UpdateAnswer(object result)
@@ -34,5 +44,9 @@ public partial class CalculatorApp : Form
     {
         Task.Delay(10000).Wait();
         return a + b;
+    }
+    private Task<int> LongAddAsync(int a, int b)
+    {
+        return Task.Run(()=>LongAdd(a,b));
     }
 }
