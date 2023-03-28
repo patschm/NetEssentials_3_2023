@@ -9,10 +9,19 @@ public partial class CalculatorApp : Form
 
     private void button1_Click(object sender, EventArgs e)
     {
+        var threadHandle = SynchronizationContext.Current;
         if (int.TryParse(txtA.Text, out int a) && int.TryParse(txtB.Text, out int b))
         {
-            int result = LongAdd(a, b);
-            UpdateAnswer(result);
+            // Synchronous
+            //int result = LongAdd(a, b);
+            //UpdateAnswer(result);
+
+            // Using Tasks
+            Task.Run(()=>LongAdd(a, b))
+                .ContinueWith(pt=> {
+                    threadHandle?.Post(UpdateAnswer, pt.Result);
+                });
+
         }
     }
 
