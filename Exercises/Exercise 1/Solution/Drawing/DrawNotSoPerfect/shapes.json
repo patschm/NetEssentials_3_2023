@@ -1,0 +1,1 @@
+{"$type":"System.Collections.Generic.List`1[[Shapes.Shape, Shapes]], System.Private.CoreLib","$values":[{"$type":"Shapes.Circle, Shapes","Radius":100,"Location":{"$type":"Shapes.Position, Shapes","X":100,"Y":100},"Color":"255, 128, 0","HtmlColor":"#FF8000","LineWidth":5,"IsSelected":false}]}
