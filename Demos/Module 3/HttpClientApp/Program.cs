@@ -1,9 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Polly;
 using Polly.Extensions.Http;
 using System.Net;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
 
 namespace HttpClientApp;
 
@@ -16,24 +18,48 @@ public class Program
 {
     static void Main(string[] args)
     {
-        BasicClient();
+        //Host.CreateDefaultBuilder().ConfigureServices(svcs => {
+        //    svcs.AddHttpClient();
+        //});
+
+        //BasicClientAsync();
         //DIClient();
-        //StrongClient();
+        StrongClient();
         //PostClient();
         //AuthClient();
+        Console.ReadLine();
     }
 
-    private static void BasicClient()
+    static HttpClient client2 = new HttpClient();
+
+    private static async Task BasicClientAsync()
     {
         HttpClient client = new HttpClient();
         client.BaseAddress = new Uri("https://localhost:8001/");
 
-        var response = client.GetAsync("WeatherForecast").Result;
+        HttpResponseMessage? response = await client.GetAsync("WeatherForecast");
         if (response.IsSuccessStatusCode)
         {
-            var strData = response.Content.ReadAsStringAsync().Result;
-            Console.WriteLine(strData);
+            foreach (var head in response.Headers)
+            {
+                Console.WriteLine($"{head.Key}: {string.Join(", ", head.Value)}");
+            }
+            foreach(var head in response.Content.Headers)
+            {
+                Console.WriteLine($"{head.Key}: {string.Join(", ", head.Value)}");
+            }
+            //var strData = await response.Content.ReadAsStringAsync();
+            //Console.WriteLine(strData);
+            var data = await response.Content.ReadFromJsonAsync<WeatherForecast[]>();
+            foreach(var wf in data)
+            {
+                Console.WriteLine(wf.Summary);
+            }
         }
+
+        client.Dispose();
+
+        //client.GetAsync
     }
     private static void DIClient()
     {
@@ -43,10 +69,9 @@ public class Program
         builder.AddHttpClient("weather", opts =>
         {
             opts.BaseAddress = new Uri("https://localhost:8001/");
-        })
-            .SetHandlerLifetime(TimeSpan.FromMinutes(5)) // Default is 10 minutes
+        }).SetHandlerLifetime(TimeSpan.FromMinutes(5)) // Default is 4 minutes
             .AddPolicyHandler(msg =>
-            { 
+            {
                 // Retry mechanisms
                 // From Microsoft.Extensions.Http.Polly
                 return HttpPolicyExtensions

@@ -61,11 +61,11 @@ namespace ConsoleCalc
 
         private static void Collections()
         {
-
             //List<int> list = new List<int>();
             ConcurrentBag<int> bag = new ConcurrentBag<int>();
-
-
+            ConcurrentDictionary<string, int> dict;
+          
+            
             Parallel.For(0, 25, ind =>
             {
                 //list.Add(ind);

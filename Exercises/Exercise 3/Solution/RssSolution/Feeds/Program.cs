@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-Host.CreateDefaultBuilder()
+var app = Host.CreateDefaultBuilder()
     .ConfigureServices((_, services) =>
     {
         services.AddHttpClient("nu", client =>
@@ -15,6 +15,7 @@ Host.CreateDefaultBuilder()
         services.AddTransient<IFeedReader, FeedReader>();
         services.AddHostedService<ConsoleApp>();
     })
-    .Build()
-    .Run();
+    .Build();
+
+app.Run();
         
